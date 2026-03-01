@@ -56,12 +56,56 @@ end top_basys3;
 architecture top_basys3_arch of top_basys3 is 
 	
     -- declare the component of your top-level design
-
-    -- declare any signals you will need	
+component full_adder is
+        port (
+            A     : in std_logic;
+            B     : in std_logic;
+            Cin   : in std_logic;
+            S     : out std_logic;
+            Cout  : out std_logic
+            );
+        end component full_adder;
+    -- Declare signals here
+        signal w_carry  : STD_LOGIC_VECTOR(3 downto 0); -- for ripple between adders
+        
   
 begin
 	-- PORT MAPS --------------------
-   
+   full_adder_0: full_adder
+    port map(
+        A     => sw(1),
+        B     => sw(12),
+        Cin   => sw(0),   -- Directly to input here
+        S     => led(0),
+        Cout  => w_carry(0)
+    );
+
+    full_adder_1: full_adder
+    port map(
+        A     => sw(2),
+        B     => sw(13),
+        Cin   => w_carry(0),
+        S     => led(1),
+        Cout  => w_carry(1)
+    );
+    
+    full_adder_2: full_adder
+    port map(
+        A     => sw(3),
+        B     => sw(14),
+        Cin   => w_carry(1),   -- Directly to input here
+        S     => led(2),
+        Cout  => w_carry(2)
+    );
+
+    full_adder_3: full_adder
+    port map(
+        A     => sw(4),
+        B     => sw(15),
+        Cin   => w_carry(2),
+        S     => led(3),
+        Cout  => led(15)
+    );
 	---------------------------------
 	
 	-- CONCURRENT STATEMENTS --------
